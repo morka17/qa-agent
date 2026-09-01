@@ -65,8 +65,8 @@ User Story  →  Test Plan  →  Browser Execution  →  Verification  →  Bug 
 
 ```bash
 # Clone and install
-git clone https://github.com/your-org/sentinel-qa.git
-cd sentinel-qa
+git clone https://github.com/morka17/qa-agent.git
+cd qa-agent
 poetry install
 playwright install --with-deps chromium
 
