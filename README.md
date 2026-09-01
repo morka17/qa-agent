@@ -2,8 +2,8 @@
 
 **An autonomous E2E testing agent that reads user stories, drives real browsers, and files evidence-backed bug reports — no test scripts required.**
 
-[![CI](https://img.shields.io/github/actions/workflow/status/your-org/sentinel-qa/ci.yml?branch=main&label=CI)](https://github.com/your-org/sentinel-qa/actions)
-[![License](https://img.shields.io/github/license/your-org/sentinel-qa)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/morka17/qa-agent/ci.yml?branch=main&label=CI)](https://github.com/your-org/sentinel-qa/actions)
+[![License](https://img.shields.io/github/license/morka17/qa-agent)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
 [![Playwright](https://img.shields.io/badge/playwright-e2e-45ba4b)](https://playwright.dev)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
