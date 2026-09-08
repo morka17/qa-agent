@@ -1,0 +1,140 @@
+[tool.poetry]
+name = "sentinel-qa"
+version = "0.1.0"
+description = "An autonomous E2E testing agent that reads user stories, drives real browsers via Playwright, and files evidence-backed bug reports."
+authors = ["Morka Joshua joshua@hasule.com"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/morka19/qa-agent"
+repository = "https://github.com/morka19/qa-agent"
+documentation = "https://github.com/morka19/qa-agent/tree/main/docs"
+keywords = [
+    "qa-automation",
+    "end-to-end-testing",
+    "playwright",
+    "autonomous-agent",
+    "llm-agent",
+    "test-automation",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Quality Assurance",
+]
+packages = [{ include = "qa_agent", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+# Core
+pydantic = "^2.7"
+pydantic-settings = "^2.3"
+typer = "^0.12"
+
+# Browser automation
+playwright = "^1.45"
+
+# Web / API
+fastapi = "^0.111"
+uvicorn = { extras = ["standard"], version = "^0.30" }
+httpx = "^0.27"
+
+# Database
+sqlalchemy = { extras = ["asyncio"], version = "^2.0" }
+asyncpg = "^0.29"
+alembic = "^1.13"
+pgvector = "^0.2"
+
+# Task queue / orchestration
+redis = "^5.0"
+celery = { extras = ["redis"], version = "^5.4" }
+
+# Storage
+boto3 = "^1.34"
+
+# LLM providers
+anthropic = "^0.30"
+openai = "^1.35"
+
+# Observability
+opentelemetry-api = "^1.25"
+opentelemetry-sdk = "^1.25"
+prometheus-client = "^0.20"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2"
+pytest-asyncio = "^0.23"
+pytest-cov = "^5.0"
+mypy = "^1.10"
+ruff = "^0.5"
+black = "^24.4"
+pre-commit = "^3.7"
+faker = "^25.8"
+respx = "^0.21"          # httpx mock for connector tests
+pytest-playwright = "^0.5"
+
+[tool.poetry.scripts]
+qa_agent = "qa_agent.main:app"
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
+
+# ---------------------------------------------------------------------------
+# Tooling configuration
+# ---------------------------------------------------------------------------
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+    "RUF", # ruff-specific rules
+]
+ignore = ["E501"]  # line length handled by black
+
+[tool.ruff.lint.isort]
+known-first-party = ["qa_agent"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311", "py312"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
+exclude = ["tests/e2e_fixtures/"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-ra --cov=qa_agent --cov-report=term-missing --cov-report=xml"
+markers = [
+    "unit: fast, isolated unit tests",
+    "integration: tests that require a live DB/Redis/browser",
+    "e2e: full agent-loop tests against fixture apps",
+]
+
+[tool.coverage.run]
+source = ["src/qa_agent"]
+omit = ["*/tests/*", "*/migrations/*"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
