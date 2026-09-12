@@ -1,0 +1,85 @@
+<!doctype html>
+<!--
+  Demo e-commerce fixture app for Sentinel-QA's own end-to-end self-tests
+  (tests/e2e_fixtures/). Deliberately framework-free, single-file HTML +
+  vanilla JS so it has zero build step and zero dependencies - serve it
+  with anything (`python -m http.server`) and point a run's target_url at
+  it. Includes one deliberately seeded bug (see BUG comment below) so a
+  Sentinel run against this fixture has something real to find, useful
+  for regression-testing triage/classification against a known-truth bug.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Demo Shop</title>
+  <style>
+    body { font-family: sans-serif; max-width: 480px; margin: 40px auto; }
+    button { padding: 8px 16px; margin-right: 8px; cursor: pointer; }
+    #cart-summary { margin-top: 24px; padding: 12px; border: 1px solid #ccc; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="#" id="nav-home">Home</a> &nbsp;
+    <a href="#" id="nav-cart">View Cart</a>
+  </header>
+
+  <main id="product-page">
+    <h1>Wireless Headphones</h1>
+    <p>Noise-cancelling, 30 hour battery life.</p>
+    <p><strong>$79.99</strong></p>
+    <button id="add-to-cart">Add to Cart</button>
+    <button id="add-to-wishlist">Add to Wishlist</button>
+
+    <div id="cart-summary">
+      <span id="cart-count">0</span> item(s) in cart
+      <span id="cart-total"></span>
+    </div>
+  </main>
+
+  <section id="checkout-page" class="hidden">
+    <h1>Checkout</h1>
+    <p>Items: <span id="checkout-item-count"></span></p>
+    <button id="place-order">Place Order</button>
+    <p id="order-status"></p>
+  </section>
+
+  <script>
+    let cartCount = 0;
+    const itemPrice = 79.99;
+
+    document.getElementById('add-to-cart').addEventListener('click', () => {
+      cartCount += 1;
+      document.getElementById('cart-count').textContent = String(cartCount);
+      // BUG (seeded intentionally): the total is never updated here.
+      // A Sentinel run asserting "the cart total reflects the item
+      // price" against this fixture should correctly catch this as a
+      // genuine app_bug - this is the fixture's known-truth defect.
+      // document.getElementById('cart-total').textContent = `$${(cartCount * itemPrice).toFixed(2)}`;
+    });
+
+    document.getElementById('add-to-wishlist').addEventListener('click', () => {
+      alert('Added to wishlist');
+    });
+
+    document.getElementById('nav-cart').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('product-page').classList.add('hidden');
+      document.getElementById('checkout-page').classList.remove('hidden');
+      document.getElementById('checkout-item-count').textContent = String(cartCount);
+    });
+
+    document.getElementById('nav-home').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('checkout-page').classList.add('hidden');
+      document.getElementById('product-page').classList.remove('hidden');
+    });
+
+    document.getElementById('place-order').addEventListener('click', () => {
+      document.getElementById('order-status').textContent =
+        cartCount > 0 ? 'Order Confirmed' : 'Your cart is empty';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "title": "Cart total does not update after adding an item to the cart",
+  "severity": "high",
+  "category": "app_bug",
+  "summary": "The cart total does not update when an item is added to the cart.",
+  "expected_behavior": "After adding an item to the cart, the cart total should display the item's price.",
+  "actual_behavior": "The cart total remains blank after the item is added, even though the item count increments correctly.",
+  "repro_steps": [
+    {
+      "order": 0,
+      "description": "Go to the product page"
+    },
+    {
+      "order": 1,
+      "description": "Add the item to the cart"
+    }
+  ],
+  "labels": [
+    "sentinel-qa",
+    "category:app_bug",
+    "severity:high"
+  ],
+  "occurrence_count": 1
+}

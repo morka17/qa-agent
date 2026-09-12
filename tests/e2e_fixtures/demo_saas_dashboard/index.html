@@ -1,0 +1,109 @@
+<!doctype html>
+<!--
+  Demo SaaS dashboard fixture app. Complements demo_ecommerce_app with a
+  different UI shape - a sidebar-nav dashboard with dynamically rendered
+  widgets - since Sentinel's perception layer should generalize across
+  very different markup patterns, not just one app's conventions.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Demo Dashboard</title>
+  <style>
+    body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; }
+    nav { width: 180px; background: #1a1a2e; color: white; padding: 16px; }
+    nav a { display: block; color: #ccc; text-decoration: none; padding: 8px 0; }
+    nav a.active { color: white; font-weight: bold; }
+    main { flex: 1; padding: 24px; }
+    .widget { border: 1px solid #ddd; border-radius: 4px; padding: 16px; margin-bottom: 16px; }
+    .hidden { display: none; }
+    button { padding: 6px 14px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="#" id="nav-overview" class="active">Overview</a>
+    <a href="#" id="nav-reports">Reports</a>
+    <a href="#" id="nav-settings">Settings</a>
+  </nav>
+
+  <main>
+    <section id="overview-panel">
+      <h1>Overview</h1>
+      <div class="widget">
+        <span>Active Users</span>
+        <div id="active-users-count">128</div>
+      </div>
+      <button id="refresh-stats">Refresh Stats</button>
+      <div id="refresh-status"></div>
+    </section>
+
+    <section id="reports-panel" class="hidden">
+      <h1>Reports</h1>
+      <button id="generate-report">Generate Report</button>
+      <div id="report-output"></div>
+    </section>
+
+    <section id="settings-panel" class="hidden">
+      <h1>Settings</h1>
+      <label>
+        Display name
+        <input type="text" id="display-name-input" placeholder="Your name" />
+      </label>
+      <button id="save-settings">Save Changes</button>
+      <div id="save-status"></div>
+    </section>
+  </main>
+
+  <script>
+    function showPanel(id) {
+      ['overview-panel', 'reports-panel', 'settings-panel'].forEach((panelId) => {
+        document.getElementById(panelId).classList.toggle('hidden', panelId !== id);
+      });
+      document.querySelectorAll('nav a').forEach((a) => a.classList.remove('active'));
+    }
+
+    document.getElementById('nav-overview').addEventListener('click', (e) => {
+      e.preventDefault();
+      showPanel('overview-panel');
+      e.target.classList.add('active');
+    });
+    document.getElementById('nav-reports').addEventListener('click', (e) => {
+      e.preventDefault();
+      showPanel('reports-panel');
+      e.target.classList.add('active');
+    });
+    document.getElementById('nav-settings').addEventListener('click', (e) => {
+      e.preventDefault();
+      showPanel('settings-panel');
+      e.target.classList.add('active');
+    });
+
+    document.getElementById('refresh-stats').addEventListener('click', () => {
+      // Simulates a slow async refresh - useful for testing the agent's
+      // wait/retry behavior against real network-like timing variance.
+      document.getElementById('refresh-status').textContent = 'Refreshing…';
+      setTimeout(() => {
+        const current = parseInt(document.getElementById('active-users-count').textContent, 10);
+        document.getElementById('active-users-count').textContent = String(current + 1);
+        document.getElementById('refresh-status').textContent = 'Updated just now';
+      }, 600);
+    });
+
+    document.getElementById('generate-report').addEventListener('click', () => {
+      // BUG (seeded intentionally): clicking generates the report but
+      // never renders it into #report-output - a story asserting "the
+      // report is shown" should reliably fail here, giving triage a
+      // second known-truth app_bug distinct from the e-commerce fixture.
+      console.log('report generated (not rendered - seeded bug)');
+    });
+
+    document.getElementById('save-settings').addEventListener('click', () => {
+      const name = document.getElementById('display-name-input').value;
+      document.getElementById('save-status').textContent = name
+        ? `Saved as "${name}"`
+        : 'Please enter a display name';
+    });
+  </script>
+</body>
+</html>
