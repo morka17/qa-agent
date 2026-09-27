@@ -1,0 +1,56 @@
+[
+  {
+    "name": "add_to_cart_button",
+    "description": "the 'Add to Cart' button",
+    "expected_index": 1,
+    "page": {
+      "url": "https://shop.example.com/product/1",
+      "title": "Product",
+      "elements": [
+        {"index": 0, "tag": "a", "role": "link", "accessible_name": "View Cart"},
+        {"index": 1, "tag": "button", "role": "button", "accessible_name": "Add to Cart"},
+        {"index": 2, "tag": "button", "role": "button", "accessible_name": "Add to Wishlist"}
+      ]
+    }
+  },
+  {
+    "name": "search_input_by_placeholder",
+    "description": "the search input field",
+    "expected_index": 0,
+    "page": {
+      "url": "https://shop.example.com",
+      "title": "Home",
+      "elements": [
+        {"index": 0, "tag": "input", "role": "textbox", "attributes": {"placeholder": "Search products"}},
+        {"index": 1, "tag": "button", "role": "button", "accessible_name": "Submit"}
+      ]
+    }
+  },
+  {
+    "name": "place_order_button",
+    "description": "the 'Place Order' button",
+    "expected_index": 2,
+    "page": {
+      "url": "https://shop.example.com/checkout",
+      "title": "Checkout",
+      "elements": [
+        {"index": 0, "tag": "a", "role": "link", "accessible_name": "Edit Cart"},
+        {"index": 1, "tag": "input", "role": "textbox", "attributes": {"placeholder": "Promo code"}},
+        {"index": 2, "tag": "button", "role": "button", "accessible_name": "Place Order"}
+      ]
+    }
+  },
+  {
+    "name": "deliberately_wrong_expected_index",
+    "description": "the 'Place Order' button",
+    "expected_index": 0,
+    "page": {
+      "url": "https://shop.example.com/checkout",
+      "title": "Checkout",
+      "elements": [
+        {"index": 0, "tag": "a", "role": "link", "accessible_name": "Edit Cart"},
+        {"index": 1, "tag": "button", "role": "button", "accessible_name": "Place Order"}
+      ]
+    }
+  }
+]
